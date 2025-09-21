@@ -15,6 +15,6 @@ export default createRouter((router: Router) => {
   );
 
   router.get('/all-users', handleGetAllUsers);
-  router.get('/all-verfied-users', handleGetAllVerifiedUsers);
+  router.get('/all-verified-users', handleGetAllVerifiedUsers);
   router.delete('/remove-unverified-users', handleDeleteAllUnverifiedUsers);
 });

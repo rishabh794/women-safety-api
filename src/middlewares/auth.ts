@@ -30,12 +30,6 @@ export function authenticate({ verifyAdmin } = {
     if (!user)
       throw new BackendError('USER_NOT_FOUND');
 
-    if (!user.isVerified) {
-      throw new BackendError('UNAUTHORIZED', {
-        message: 'User not verified',
-      });
-    }
-
     if (verifyAdmin && !user.isAdmin) {
       throw new BackendError('UNAUTHORIZED', {
         message: 'User not authorized',

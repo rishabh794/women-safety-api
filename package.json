@@ -10,6 +10,7 @@
     "dev": "tsx watch src/server.ts",
     "generate": "drizzle-kit generate:pg",
     "migrate": "tsx src/migrate.ts",
+    "db:studio": "drizzle-kit studio",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
@@ -17,7 +18,7 @@
     "@aws-sdk/client-ses": "^3.504.0",
     "@react-email/components": "^0.0.14",
     "@react-email/render": "^0.0.12",
-    "argon2": "^0.31.2",
+    "bcryptjs": "^3.0.2",
     "consola": "^3.2.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.1",

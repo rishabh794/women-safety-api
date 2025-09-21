@@ -1,6 +1,6 @@
 import process from 'node:process';
 import crypto from 'node:crypto';
-import argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 import { eq } from 'drizzle-orm';
 import { type NewUser, type UpdateUser, type User, users } from '@/schema/user';
 import { db } from '@/utils/db';
@@ -19,18 +19,17 @@ export async function getUserByEmail(email: string) {
 }
 
 export async function addUser(user: NewUser) {
-  const { password, ...userDetails } = user;
+  const { name, email, password } = user;
 
   const salt = crypto.randomBytes(32);
   const code = crypto.randomBytes(32).toString('hex');
-  const hashedPassword = await argon2.hash(password, {
-    salt,
-  });
+  const hashedPassword = bcrypt.hashSync(password, 10);
 
   const [newUser] = await db
     .insert(users)
     .values({
-      ...userDetails,
+      name,
+      email,
       password: hashedPassword,
       salt: salt.toString('hex'),
       code,
@@ -102,21 +101,15 @@ export async function deleteUser(email: string) {
 }
 
 export async function updateUser(user: User, { name, email, password }: UpdateUser) {
-  let code: string | undefined;
-  let hashedCode: string | undefined;
-
   if (email) {
-    const user = await getUserByEmail(email);
+    const existingUser = await getUserByEmail(email);
 
-    if (user) {
+    if (existingUser && existingUser.id !== user.id) {
       throw new BackendError('CONFLICT', {
         message: 'Email already in use',
         details: { email },
       });
     }
-
-    code = crypto.randomBytes(32).toString('hex');
-    hashedCode = sha256.hash(code);
   }
 
   const [updatedUser] = await db
@@ -125,8 +118,6 @@ export async function updateUser(user: User, { name, email, password }: UpdateUs
       name,
       password,
       email,
-      code: hashedCode,
-      isVerified: hashedCode ? false : user.isVerified,
     })
     .where(eq(users.email, user.email))
     .returning({
@@ -142,27 +133,6 @@ export async function updateUser(user: User, { name, email, password }: UpdateUs
     throw new BackendError('USER_NOT_FOUND', {
       message: 'User could not be updated',
     });
-  }
-
-  if (email && code) {
-    const { API_BASE_URL } = process.env;
-    const status = await sendVerificationEmail(
-      API_BASE_URL,
-      updatedUser.name,
-      updatedUser.email,
-      code,
-    );
-
-    if (status !== 200) {
-      await db
-        .update(users)
-        .set({ email: user.email, isVerified: user.isVerified })
-        .where(eq(users.email, updatedUser.email))
-        .returning();
-      throw new BackendError('BAD_REQUEST', {
-        message: 'Email could not be updated',
-      });
-    }
   }
 
   return updatedUser;

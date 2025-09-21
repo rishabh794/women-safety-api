@@ -15,6 +15,6 @@ export default createRouter((router: Router) => {
   router.get('/verify', (req, res, next) => handleVerifyUser(req, res, next));
   router.post('/create', handleAddUser);
   router.post('/login', handleUserLogin);
-  router.post('/remove', authenticate(), handleDeleteUser);
-  router.put('/update', authenticate(), handleUpdateUser);
+  router.delete('/remove', authenticate(), handleDeleteUser);
+  router.patch('/update', authenticate(), handleUpdateUser);
 });

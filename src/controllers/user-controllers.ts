@@ -1,7 +1,7 @@
 import process from 'node:process';
 import { Buffer } from 'node:buffer';
 import { render } from '@react-email/render';
-import argon2 from 'argon2';
+import bcrypt from 'bcryptjs';
 import {
   type User,
   deleteUserSchema,
@@ -30,14 +30,20 @@ export const handleUserLogin = createHandler(loginSchema, async (req, res) => {
   if (!user)
     throw new BackendError('USER_NOT_FOUND');
 
-  const matchPassword = await argon2.verify(user.password, password, {
-    salt: Buffer.from(user.salt, 'hex'),
-  });
+  const matchPassword = bcrypt.compareSync(password, user.password);
   if (!matchPassword)
     throw new BackendError('INVALID_PASSWORD');
 
   const token = generateToken(user.id);
-  res.status(200).json({ token });
+  res.status(200).json({
+    token,
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isAdmin: user.isAdmin,
+    },
+  });
 });
 
 export const handleAddUser = createHandler(newUserSchema, async (req, res) => {
@@ -51,21 +57,7 @@ export const handleAddUser = createHandler(newUserSchema, async (req, res) => {
     });
   }
 
-  const { user: addedUser, code } = await addUser(user);
-
-  const status = await sendVerificationEmail(
-    process.env.API_BASE_URL,
-    addedUser.name,
-    addedUser.email,
-    code,
-  );
-
-  if (status !== 200) {
-    await deleteUser(addedUser.email);
-    throw new BackendError('INTERNAL_ERROR', {
-      message: 'Failed to signup user',
-    });
-  }
+  const { user: addedUser } = await addUser(user);
 
   res.status(201).json(addedUser);
 });

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import process from 'node:process';
 import consola from 'consola';
 import cors from 'cors';

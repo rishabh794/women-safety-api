@@ -20,6 +20,16 @@
 
 # local env files
 .env
+.env.*
+!.env.example
+
+# editor config
+.idea/
+.vscode/
+
+# log files
+*.log
+
 
 # typescript
 *.tsbuildinfo

@@ -4,7 +4,10 @@ import postgres from 'postgres';
 import { drizzle } from 'drizzle-orm/postgres-js';
 import drizzleConfig from '../drizzle.config';
 import 'dotenv/config';
-
+// eslint-disable-next-line no-console
+console.log('--- Starting Migration Script ---');
+// eslint-disable-next-line no-console
+console.log('DATABASE_URL found:', process.env.DB_URL);
 async function main() {
   const connection = postgres(process.env.DB_URL, { max: 1 });
 

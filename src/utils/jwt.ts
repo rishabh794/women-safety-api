@@ -3,7 +3,7 @@ import JWT from 'jsonwebtoken';
 import { BackendError } from './errors';
 
 const JWT_CONFIG: JWT.SignOptions = {
-  expiresIn: '10m',
+  expiresIn: '7d',
 };
 
 const { JWT_SECRET } = process.env;
