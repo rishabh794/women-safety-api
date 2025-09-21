@@ -8,7 +8,7 @@ import { mw as requestIp } from 'request-ip';
 import { logger } from './utils/logger';
 import { errorHandler, handle404Error } from '@/utils/errors';
 import routes from '@/routes/routes';
-import './utils/env';
+import './utils/env.ts';
 
 const { PORT } = process.env;
 

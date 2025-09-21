@@ -57,9 +57,9 @@ export const handleAddUser = createHandler(newUserSchema, async (req, res) => {
     });
   }
 
-  const { user: addedUser } = await addUser(user);
+  const { user: addedUser, token } = await addUser(user);
 
-  res.status(201).json(addedUser);
+  res.status(201).json({ user: addedUser, token });
 });
 
 export const handleVerifyUser = createHandler(verifyUserSchema, async (req, res) => {

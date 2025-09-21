@@ -7,6 +7,7 @@ import { db } from '@/utils/db';
 import { sendVerificationEmail } from '@/utils/email';
 import { BackendError } from '@/utils/errors';
 import { sha256 } from '@/utils/hash';
+import generateToken from '@/utils/jwt';
 
 export async function getUserByUserId(userId: string) {
   const [user] = await db.select().from(users).where(eq(users.id, userId)).limit(1);
@@ -48,8 +49,9 @@ export async function addUser(user: NewUser) {
       message: 'Failed to add user',
     });
   }
+  const token = generateToken(newUser.id);
 
-  return { user: newUser, code };
+  return { user: newUser, code, token };
 }
 
 export async function verifyUser(email: string, code: string) {
