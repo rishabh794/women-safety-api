@@ -16,5 +16,5 @@ export default createRouter((router: Router) => {
   router.post('/create', handleAddUser);
   router.post('/login', handleUserLogin);
   router.delete('/remove', authenticate(), handleDeleteUser);
-  router.patch('/update', authenticate(), handleUpdateUser);
+  router.put('/update', authenticate(), handleUpdateUser);
 });
