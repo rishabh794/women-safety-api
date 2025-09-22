@@ -4,6 +4,7 @@ import {
   getAllVerifiedUsers,
 } from '@/services/admin-services';
 import { createHandler } from '@/utils/create';
+import { getAllAlerts } from '@/services/alert-service';
 
 export const handleGetAllVerifiedUsers = createHandler(async (_req, res) => {
   const users = await getAllVerifiedUsers();
@@ -24,4 +25,9 @@ export const handleDeleteAllUnverifiedUsers = createHandler(async (_req, res) =>
   res.status(200).json({
     message: `${unverfiedUsersCount} unverified users deleted successfully`,
   });
+});
+
+export const handleGetAllAlerts = createHandler(async (req, res) => {
+  const allAlerts = await getAllAlerts();
+  res.status(200).json({ alerts: allAlerts });
 });
