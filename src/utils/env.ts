@@ -16,12 +16,17 @@ const configSchema = z.object({
       url => url.startsWith('postgres://') || url.startsWith('postgresql://'),
       'DB_URL must be a valid postgresql url',
     ),
-  FROM_NAME: z.string().default('Verify'),
-  FROM_EMAIL: z.string().email(),
-  AWS_ACCESS_KEY: z.string(),
-  AWS_SECRET_ACCESS_KEY: z.string(),
-  AWS_REGION: z.string(),
   JWT_SECRET: z.string(),
+
+  TWILIO_ACCOUNT_SID: z.string(),
+  TWILIO_AUTH_TOKEN: z.string(),
+  TWILIO_PHONE_NUMBER: z.string(),
+
+  FROM_NAME: z.string().optional(),
+  FROM_EMAIL: z.string().email().optional(),
+  AWS_ACCESS_KEY: z.string().optional(),
+  AWS_SECRET_ACCESS_KEY: z.string().optional(),
+  AWS_REGION: z.string().optional(),
 });
 
 try {
