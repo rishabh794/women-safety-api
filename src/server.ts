@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import process from 'node:process';
+import http from 'node:http';
+import { Server } from 'socket.io';
 import consola from 'consola';
 import cors from 'cors';
 import express from 'express';
@@ -13,6 +15,14 @@ import './utils/env.ts';
 const { PORT } = process.env;
 
 const app = express();
+const httpServer = http.createServer(app);
+
+const io = new Server(httpServer, {
+  cors: {
+    origin: '*',
+    methods: ['GET', 'POST'],
+  },
+});
 
 app.use(express.json());
 app.use(cors());
@@ -52,6 +62,26 @@ app.all('*', handle404Error);
 
 app.use(errorHandler);
 
-app.listen(PORT, () => {
+io.on('connection', (socket) => {
+  consola.log('A user connected with socket ID:', socket.id);
+
+  socket.on('join-alert-room', (alertId) => {
+    socket.join(alertId);
+    consola.log(`Socket ${socket.id} joined room ${alertId}`);
+  });
+
+  socket.on('location-update', (data) => {
+    io.to(data.alertId).emit('new-location', {
+      latitude: data.latitude,
+      longitude: data.longitude,
+    });
+  });
+
+  socket.on('disconnect', () => {
+    consola.log('User disconnected:', socket.id);
+  });
+});
+
+httpServer.listen(PORT, () => {
   consola.info(`Server running at http://localhost:${PORT}`);
 });
