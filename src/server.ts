@@ -77,6 +77,14 @@ io.on('connection', (socket) => {
     });
   });
 
+  socket.on('stop-tracking', (data) => {
+    if (data && data.alertId) {
+      io.in(data.alertId).emit('alert-resolved');
+      io.in(data.alertId).disconnectSockets(true);
+      consola.log(`Alert resolved and all clients removed from room ${data.alertId}`);
+    }
+  });
+
   socket.on('disconnect', () => {
     consola.log('User disconnected:', socket.id);
   });
