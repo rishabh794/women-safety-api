@@ -1,4 +1,6 @@
-import { desc } from 'drizzle-orm';
+import process from 'node:process';
+import 'dotenv/config';
+import { desc, eq } from 'drizzle-orm';
 import { getGuardiansByUserId } from './guardian-service';
 import { getUserByUserId } from './user-services';
 import { sendSms } from './sms-services';
@@ -12,8 +14,8 @@ export async function createAlert(alertData: NewAlert) {
   if (newAlert) {
     const user = await getUserByUserId(newAlert.userId);
     const guardians = await getGuardiansByUserId(newAlert.userId);
-    const mapsLink = `https://www.google.com/maps?q=${newAlert.latitude},${newAlert.longitude}`;
-    const messageBody = `Emergency Alert: ${user?.name} has triggered an SOS. Last known location: ${mapsLink}`;
+    const trackingLink = `${process.env.FRONTEND_URL}/track/${newAlert.id}`;
+    const messageBody = `Emergency Alert: ${user?.name} has triggered an SOS. View their live location here: ${trackingLink}`;
 
     for (const guardian of guardians)
       await sendSms(guardian.phoneNumber, messageBody);
@@ -24,4 +26,9 @@ export async function createAlert(alertData: NewAlert) {
 
 export async function getAllAlerts() {
   return db.select().from(alerts).orderBy(desc(alerts.createdAt));
+}
+
+export async function getAlertById(alertId: string) {
+  const [alert] = await db.select().from(alerts).where(eq(alerts.id, alertId));
+  return alert;
 }

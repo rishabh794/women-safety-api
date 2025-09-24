@@ -27,6 +27,7 @@ const configSchema = z.object({
   AWS_ACCESS_KEY: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().optional(),
   AWS_REGION: z.string().optional(),
+  FRONTEND_URL: z.string().url(),
 });
 
 try {

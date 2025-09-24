@@ -10,4 +10,5 @@ export default createRouter((router: Router) => {
   router.use('/user', userRoutes);
   router.use('/alerts', alertRoutes);
   router.use('/guardians', guardianRoutes);
+  
 });

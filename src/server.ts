@@ -68,6 +68,8 @@ io.on('connection', (socket) => {
   socket.on('join-alert-room', (alertId) => {
     socket.join(alertId);
     consola.log(`Socket ${socket.id} joined room ${alertId}`);
+
+    io.to(alertId).emit('guardian-joined', { socketId: socket.id });
   });
 
   socket.on('location-update', (data) => {
@@ -79,9 +81,9 @@ io.on('connection', (socket) => {
 
   socket.on('stop-tracking', (data) => {
     if (data && data.alertId) {
+      consola.log(`Server: Broadcasting 'alert-resolved' to room: ${data.alertId}`);
       io.in(data.alertId).emit('alert-resolved');
       io.in(data.alertId).disconnectSockets(true);
-      consola.log(`Alert resolved and all clients removed from room ${data.alertId}`);
     }
   });
 

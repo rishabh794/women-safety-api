@@ -12,7 +12,7 @@ const client = twilio(accountSid, authToken);
 export async function sendSms(to: string, body: string) {
   if (!smsEnabled) {
     // eslint-disable-next-line no-console
-    console.log('SMS is disabled. Would have sent to:', to);
+    console.log('SMS is disabled. Would have sent to:', to, 'Message Body: ', body);
     return;
   }
   try {

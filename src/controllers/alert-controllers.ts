@@ -1,5 +1,6 @@
 import { createHandler } from '@/utils/create';
-import { createAlert } from '@/services/alert-service';
+import { createAlert, getAlertById } from '@/services/alert-service';
+import { BackendError } from '@/utils/errors';
 import type { User } from '@/schema/user';
 
 export const handleCreateAlert = createHandler(async (req, res) => {
@@ -16,4 +17,15 @@ export const handleCreateAlert = createHandler(async (req, res) => {
     alert: newAlert,
     message: 'Emergency alert successfully registered.',
   });
+});
+
+export const handleGetAlert = createHandler(async (req, res) => {
+  const { alertId } = req.params;
+  if (!alertId) {
+    throw new BackendError('NOT_FOUND', {
+      message: 'Alert not found',
+    });
+  }
+  const alert = await getAlertById(alertId);
+  res.status(200).json({ alert });
 });
