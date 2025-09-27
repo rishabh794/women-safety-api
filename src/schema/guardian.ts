@@ -23,6 +23,8 @@ export const newGuardianSchema = z.object({
     name: true,
     phoneNumber: true,
     email: true,
+  }).extend({
+    phoneNumber: z.string().regex(/^\+[1-9]\d{10,14}$/, { message: 'Phone number must be in international format (e.g., +919876543210)' }),
   }).partial({
     email: true,
   }),
@@ -33,6 +35,8 @@ export const updateGuardianSchema = z.object({
     name: true,
     phoneNumber: true,
     email: true,
+  }).extend({
+    phoneNumber: z.string().regex(/^\+[1-9]\d{10,14}$/, { message: 'Phone number must be in international format (e.g., +919876543210)' }).optional(),
   }).partial(),
 });
 
