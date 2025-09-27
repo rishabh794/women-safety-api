@@ -1,6 +1,7 @@
 import 'dotenv/config';
 import process from 'node:process';
 import twilio from 'twilio';
+import consola from 'consola';
 
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -11,8 +12,7 @@ const client = twilio(accountSid, authToken);
 
 export async function sendSms(to: string, body: string) {
   if (!smsEnabled) {
-    // eslint-disable-next-line no-console
-    console.log('SMS is disabled. Would have sent to:', to, 'Message Body: ', body);
+    consola.log('SMS is disabled. Would have sent to:', to, 'Message Body: ', body);
     return;
   }
   try {
@@ -23,6 +23,6 @@ export async function sendSms(to: string, body: string) {
     });
   }
   catch (error) {
-    console.error('Error sending SMS via Twilio:', error);
+    consola.error('Error sending SMS via Twilio:', error);
   }
 }

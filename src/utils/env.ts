@@ -1,6 +1,7 @@
 import process from 'node:process';
 import { ZodError, z } from 'zod';
 import 'dotenv/config';
+import consola from 'consola';
 
 const configSchema = z.object({
   PORT: z
@@ -35,7 +36,7 @@ try {
 }
 catch (error) {
   if (error instanceof ZodError)
-    console.error(error.errors);
+    consola.error(error.errors);
 
   process.exit(1);
 }

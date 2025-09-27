@@ -31,7 +31,7 @@ app.use(requestIp());
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 100,
+    max: 25,
     handler: (req, res) => {
       consola.warn(`DDoS Attempt from ${req.ip}`);
       res.status(429).json({
