@@ -19,14 +19,16 @@ const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: '*',
+    origin: 'https://women-safety-frontend-bice.vercel.app',
     methods: ['GET', 'POST'],
   },
   allowEIO3: true,
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://women-safety-frontend-bice.vercel.app',
+}));
 app.use(requestIp());
 app.use(
   rateLimit({
