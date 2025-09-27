@@ -22,6 +22,7 @@ const io = new Server(httpServer, {
     origin: '*',
     methods: ['GET', 'POST'],
   },
+  allowEIO3: true,
 });
 
 app.use(express.json());
