@@ -1,9 +1,3 @@
-Of course. A professional `README.md` for your backend is just as important as it is for your frontend. It tells the story of your project's architecture and technology.
-
-Here is a clear and well-structured README that you can copy and paste directly into your `README.md` file in your `women-safety-api` repository.
-
----
-
 # Women Safety App - Backend API
 
 This repository contains the backend service for the Women Safety App, a full-stack application designed to provide real-time safety features. This server is built with Node.js and Express, and it provides a secure RESTful API and a real-time WebSocket connection to the frontend client.
