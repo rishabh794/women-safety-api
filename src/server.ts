@@ -95,15 +95,6 @@ io.on('connection', (socket) => {
   });
 });
 
-if (process.env.RENDER) {
-  consola.success('--- SERVER IS RUNNING ON THE RENDER PLATFORM ---');
-  consola.info(`--- Instance ID: ${process.env.RENDER_INSTANCE_ID} ---`);
-  consola.info(`--- Service Name: ${process.env.RENDER_SERVICE_NAME} ---`);
-}
-else {
-  consola.warn('--- SERVER IS RUNNING ON A LOCAL MACHINE ---');
-}
-
 httpServer.listen(PORT, () => {
   consola.info(`Server running at http://localhost:${PORT}`);
 });
