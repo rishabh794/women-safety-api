@@ -30,7 +30,6 @@ app.use(cors({
   origin: process.env.FRONTEND_URL,
 }));
 app.use(requestIp());
-app.use(logger);
 
 app.get('/healthcheck', (_req, res) => {
   res.json({
@@ -52,6 +51,8 @@ app.use(
     },
   }),
 );
+
+app.use(logger);
 
 app.get('/', (_req, res) => {
   res.json({
