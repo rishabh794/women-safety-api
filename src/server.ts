@@ -12,23 +12,24 @@ import { errorHandler, handle404Error } from '@/utils/errors';
 import routes from '@/routes/routes';
 import './utils/env.ts';
 
-const { PORT } = process.env;
+const { PORT, FRONTEND_URL } = process.env;
 
 const app = express();
 const httpServer = http.createServer(app);
 
+const corsOptions = {
+  origin: FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+};
+
 const io = new Server(httpServer, {
-  cors: {
-    origin: process.env.FRONTEND_URL,
-    methods: ['GET', 'POST'],
-  },
+  cors: corsOptions,
+  allowEIO3: true,
   transports: ['websocket'],
 });
 
 app.use(express.json());
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-}));
+app.use(cors(corsOptions));
 app.use(requestIp());
 
 app.get('/healthcheck', (_req, res) => {
