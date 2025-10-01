@@ -1,84 +1,51 @@
-# Express-Drizzle-PostgreSQL-Starter
+# Women Safety App - Backend API
 
-A opinionated starter template for building REST APIs with Express, Drizzle ORM and PostgreSQL.
+This repository contains the backend service for the Women Safety App, a full-stack application designed to provide real-time safety features. This server is built with Node.js and Express, and it provides a secure RESTful API and a real-time WebSocket connection to the frontend client.
 
-## Features
+**Live API URL:** [https://women-safety-api.onrender.com/](https://women-safety-api.onrender.com/)
 
-- [x] User registration
-- [x] User verification via email
-- [x] User deletion
-- [x] Admin routes
+## Key Features
 
-## API Documentation
+* **Secure User Authentication:** Implements a complete JWT (JSON Web Token) based authentication system with securely hashed passwords (`bcrypt`).
+* **Real-time Location Broadcasting:** Utilizes a `socket.io` server to manage private rooms for each alert, relaying live GPS coordinates from the user to their guardians.
+* **Guardian & Alert Management:** Provides full CRUD (Create, Read, Update, Delete) API endpoints for managing users, their trusted guardians, and emergency alert history.
+* **Role-Based Access Control (RBAC):** Includes a secure admin role with dedicated endpoints for system-wide monitoring of users and alerts.
+* **Third-Party Service Integration:** Connects to the Twilio API to send real-time SMS notifications to guardians when an alert is triggered.
 
-### `GET /user`
+## Tech Stack
 
-Returns the user. Requires `AUTH_TOKEN` in the request header.
+* **Runtime:** Node.js
+* **Framework:** Express.js
+* **Database:** PostgreSQL (hosted on Neon)
+* **ORM:** Drizzle ORM for type-safe, modern database querying.
+* **Real-time Communication:** `socket.io` for managing live WebSocket connections.
+* **Authentication:** `jsonwebtoken` for creating and verifying JWTs, `bcryptjs` for password hashing.
+* **Validation:** Zod for robust, schema-based validation of environment variables and incoming API requests.
+* **Deployment:** Hosted as a Web Service on Render.
 
-### `PUT /user/update`
+## API Endpoints
 
-Updates the user. Requires `AUTH_TOKEN` in the request header.
+A brief overview of the main API endpoints. All routes are prefixed with `/api`.
 
-User can only update themselves. Properties that can be updated are `name`, `email` and `password`.
+* `POST /user/create`: Register a new user.
+* `POST /user/login`: Log in and receive a JWT.
+* `GET /user/me`: (Protected) Get the logged-in user's profile.
+* `GET /guardians`: (Protected) Get the logged-in user's list of guardians.
+* `POST /alerts`: (Protected) Create a new emergency alert.
+* ...and more for CRUD operations on users, guardians, and alerts.
 
-if `email` is updated, the user will be unverified and a new verification email will be sent.
+## Setup & Installation
 
-### `POST /user/create`
+To run this project locally:
 
-Creates a new user. Requires `name`, `email` and `password` in the request body.
-
-<img height="auto" width="750" src="https://github.com/jatindotdev/express-drizzle-postgres-starter/assets/59236972/f31e266e-68c3-44be-a0b2-d07c15ee83c6" />
-
-<img height="auto" width="750" src="https://github.com/jatindotdev/express-drizzle-postgres-starter/assets/59236972/f3763930-d88c-471c-85f3-eb7dfba350e5" />
-
-### `GET /user/verify`
-
-Verifies the user. Requires `token` and `email` in the query string.
-
-### `DELETE /user/remove`
-
-Removes the user. Requires `AUTH_TOKEN` in the request header.
-
-A user can only remove themselves.
-A admin can remove any user.
-
-### `POST /user/login`
-
-Logs in the user. Requires `email` and `password` in the request body.
-
-### `GET /admin/all-users`
-
-Returns all users. It is an admin route, requires `AUTH_TOKEN`.
-
-### `GET /admin/all-verfied-users`
-
-Returns all verified users. It is an admin route, requires `AUTH_TOKEN`.
-
-### `DELETE /admin/remove-unverified-users`
-
-Removes all unverified users. It is an admin route, requires `AUTH_TOKEN`.
-
-### Running the app
-
-Install the dependencies
-
-```bash
-pnpm install
-```
-
-Run the development server:
-
-```bash
-pnpm dev
-```
-
-### Built with
-
-- [Express](https://expressjs.com/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [drizzle-orm](https://orm.drizzle.team/)
-- [Zod](https://zod.dev/)
-- [drizzle-zod](https://orm.drizzle.team/docs/zod)
-- [TypeScript](https://www.typescriptlang.org/)
-- [react-email](https://react.email/)
-- [AWS SDK](https://aws.amazon.com/sdk-for-javascript/)
+1.  Clone the repository:
+    `git clone https://github.com/rishabh794/women-safety-api.git`
+2.  Install dependencies:
+    `pnpm install`
+3.  Create a `.env` file and provide the necessary environment variables (see `.env.example`).
+4.  Generate the database migrations:
+    `pnpm run generate`
+5.  Run the database migrations:
+    `pnpm run migrate`
+6.  Start the development server:
+    `pnpm run dev`
