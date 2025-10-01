@@ -30,6 +30,16 @@ app.use(cors({
   origin: process.env.FRONTEND_URL,
 }));
 app.use(requestIp());
+app.use(logger);
+
+app.get('/healthcheck', (_req, res) => {
+  res.json({
+    message: 'Server is running',
+    uptime: process.uptime(),
+    timestamp: Date.now(),
+  });
+});
+
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -43,19 +53,9 @@ app.use(
   }),
 );
 
-app.use(logger);
-
 app.get('/', (_req, res) => {
   res.json({
     message: 'Welcome to the API!',
-  });
-});
-
-app.get('/healthcheck', (_req, res) => {
-  res.json({
-    message: 'Server is running',
-    uptime: process.uptime(),
-    timestamp: Date.now(),
   });
 });
 
