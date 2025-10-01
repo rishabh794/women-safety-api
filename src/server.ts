@@ -19,21 +19,21 @@ const httpServer = http.createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: 'https://women-safety-frontend-bice.vercel.app',
+    origin: process.env.FRONTEND_URL,
     methods: ['GET', 'POST'],
   },
-  allowEIO3: true,
+  transports: ['websocket'],
 });
 
 app.use(express.json());
 app.use(cors({
-  origin: 'https://women-safety-frontend-bice.vercel.app',
+  origin: process.env.FRONTEND_URL,
 }));
 app.use(requestIp());
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000,
-    max: 25,
+    max: 50,
     handler: (req, res) => {
       consola.warn(`DDoS Attempt from ${req.ip}`);
       res.status(429).json({
