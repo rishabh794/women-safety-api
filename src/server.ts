@@ -88,7 +88,6 @@ io.on('connection', (socket) => {
     if (data && data.alertId) {
       consola.log(`Server: Broadcasting 'alert-resolved' to room: ${data.alertId}`);
       io.in(data.alertId).emit('alert-resolved');
-      io.in(data.alertId).disconnectSockets(true);
     }
   });
 
